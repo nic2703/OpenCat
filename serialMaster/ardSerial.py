@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#! /usr/bin/env python 
 # -*- coding: UTF-8 -*-
 
 import struct
@@ -15,10 +15,10 @@ import config
 if not config.useMindPlus:
     import tkinter as tk
     sys.path.append("../pyUI")
-    from translate import *
-    language = languageList['English']
-    def txt(key):
-        return language.get(key, textEN[key])
+#    from translate import *
+#    language = languageList['English']
+#    def txt(key):
+#        return language.get(key, textEN[key])
 
 FORMAT = '%(asctime)-15s %(name)s - %(levelname)s - %(message)s'
 '''
@@ -639,7 +639,7 @@ def keepCheckingPort(portList, cond1=None, check=True, updateFunc = lambda:None)
                     logger.debug(f"Adding serial port: {p}")
                     portName = p.split('/')[-1]
                     portStrList.insert(0, portName)  # remove '/dev/' in the port name
-                    tk.messagebox.showinfo(title=txt('Info'), message=txt('New port prompt') + portName)
+                    tk.messagebox.showinfo(title='Info', message='New port prompt' + portName)
             updateFunc()
         elif set(allPorts) - set(currentPorts):
             time.sleep(1) #usbmodem is slower in detection
@@ -716,7 +716,7 @@ def replug(PortList, needSendTask=True):
         window.destroy()
         os._exit(0)
     window.protocol('WM_DELETE_WINDOW', on_closing)
-    window.title(txt('Replug mode'))
+    window.title('Replug mode')
 
     thres = 10 # time out for the manual plug and unplug
     print('Counting down to manual mode:')
@@ -725,7 +725,7 @@ def replug(PortList, needSendTask=True):
         labelC.destroy()
         buttonC.destroy()
         
-        labelT['text']= txt('Counting down to manual mode: ')
+        labelT['text']= 'Counting down to manual mode:'
         labelT.grid(row=0,column=0)
         
         label.grid(row=1,column=0)
@@ -733,9 +733,9 @@ def replug(PortList, needSendTask=True):
         countdown(time.time(),copy.deepcopy(Communication.Print_Used_Com()))
         
     labelC = tk.Label(window, font='sans 14 bold', justify='left')
-    labelC['text'] = txt('Replug prompt')
+    labelC['text'] = 'Replug prompt'
     labelC.grid(row=0, column=0)
-    buttonC = tk.Button(window, text=txt('Confirm'), command=bCallback)
+    buttonC = tk.Button(window, text='Confirm', command=bCallback)
     buttonC.grid(row=1, column=0)
     labelT = tk.Label(window, font='sans 14 bold')
     label = tk.Label(window, font='sans 14 bold')
@@ -767,7 +767,7 @@ def replug(PortList, needSendTask=True):
                         portStrList.insert(0, portName)  # remove '/dev/' in the port name
                         goodPortCount += 1
                         logger.info(f"Connected to serial port: {p}")
-                        tk.messagebox.showinfo(title=txt('Info'), message=txt('New port prompt') + portName)
+                        tk.messagebox.showinfo(title='Info', message='New port prompt' + portName)
                         if needSendTask is True:
                             time.sleep(2)
                             result = sendTask(PortList, serialObject, ['?', 0])
@@ -819,18 +819,18 @@ def selectList(PortList,ls,win, needSendTask=True):
             win.destroy()
 
         except Exception as e:
-            tk.messagebox.showwarning(title=txt('Warning'), message=txt('* Port ') + p + txt(' cannot be opened'))
+            tk.messagebox.showwarning(title='Warning', message='* Port ' + p + ' cannot be opened')
             print("Cannot open {}".format(p))
             raise e
 
 def manualSelect(PortList, window, needSendTask=True):
     allPorts = deleteDuplicatedUsbSerial(Communication.Print_Used_Com())
-    window.title(txt('Manual mode'))
+    window.title('Manual mode')
     l1 = tk.Label(window, font = 'sans 14 bold')
-    l1['text'] = txt('Manual mode')
+    l1['text'] = 'Manual mode'
     l1.grid(row=0,column = 0)
     l2 = tk.Label(window, font='sans 14 bold')
-    l2["text"]=txt('Please select the port from the list')
+    l2["text"]='Please select the port from the list'
     l2.grid(row=1,column=0)
     ls = tk.Listbox(window,selectmode="multiple")
     ls.grid(row=2,column=0)
@@ -841,11 +841,11 @@ def manualSelect(PortList, window, needSendTask=True):
             ls.insert(tk.END,p)
     for p in allPorts:
         ls.insert(tk.END,p)
-    bu = tk.Button(window, text=txt('OK'), command=lambda:selectList(PortList, ls, window, needSendTask))
+    bu = tk.Button(window, text='OK', command=lambda:selectList(PortList, ls, window, needSendTask))
     bu.grid(row=2, column=1)
-    bu2 = tk.Button(window, text=txt('Refresh'), command=lambda:refreshBox(ls))
+    bu2 = tk.Button(window, text='Refresh', command=lambda:refreshBox(ls))
     bu2.grid(row=1, column=1)
-    tk.messagebox.showwarning(title=txt('Warning'), message=txt('Manual mode'))
+    tk.messagebox.showwarning(title='Warning', message='Manual mode')
     window.mainloop()
     
 goodPorts = {}      # goodPorts is a dictionary, the structure is {SerialPort Object(<class 'SerialCommunication.Communication'>): portName(string), ...}
